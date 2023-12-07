@@ -1,6 +1,6 @@
 
 # Stage 1: Build the Go binary
-FROM golang:1.16 AS builder
+FROM golang:1.19 AS builder
 
 WORKDIR /app
 
@@ -14,9 +14,7 @@ RUN --mount=type=cache,target=/tmp CGO_ENABLED=0 GOOS=linux go build -o chrnr-cl
 # Stage 2: Create a minimal runtime image
 FROM scratch
 
-WORKDIR /app
+COPY --from=builder /chrnr-cli .
 
-COPY --from=builder /app/chrnr-cli .
-
-CMD ["./app/chrnr-cli"]
+CMD ["./chrnr-cli"]
 
