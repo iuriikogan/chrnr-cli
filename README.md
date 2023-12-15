@@ -1,4 +1,4 @@
-## CHRNR-CLI is a command-line interface (CLI) application that creates a specified number of files with random data, and then "churns" them, or modifies them, at a specified interval this is useful to test the efficiency of change block tracking and consistency in backup and recovery of an application which simulates a stateful workload in Kubernetes.
+## CHRNR-CLI is an application that creates a specified number of files with random data, and then "churns" them, or modifies them, at a specified interval this is useful to test the efficiency of change block tracking and consistency in backup and recovery of an application which simulates a stateful workload in Kubernetes.
 
 * Here's a breakdown of the code:
 
