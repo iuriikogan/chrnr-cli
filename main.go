@@ -30,7 +30,7 @@ func runCommand(cmd *cobra.Command, args []string) {
 	// }
 	cfg := config.Config{
 		SizeOfFileMB:         1,
-		SizeOfPVCGB:          10,
+		SizeOfPVCGB:          2,
 		ChurnPercentage:      0.1,
 		ChurnIntervalMinutes: time.Duration(1 * time.Minute),
 		ChurnDuration:        time.Duration(10 * time.Minute),
@@ -54,6 +54,7 @@ func runCommand(cmd *cobra.Command, args []string) {
 	log.Printf("Size of PVC in Gb: %d\n", cfg.SizeOfPVCGB)
 	log.Printf("Churn percentage: %v\n", (cfg.ChurnPercentage * 100))
 	log.Printf("Churn interval in minutes: %v\n", printChurnInterval)
+	log.Printf("Churn duration in minutes: %v\n", time.Duration.Minutes(cfg.ChurnDuration))
 
 	// calculate number of files to create
 	sizeOfPVCMB := int(cfg.SizeOfPVCGB * 999)
@@ -106,6 +107,7 @@ func runCommand(cmd *cobra.Command, args []string) {
 			}
 		}
 	}()
+	<-make(chan struct{})
 }
 
 func main() {
