@@ -16,12 +16,7 @@ import (
 var rootCmd = &cobra.Command{
 	Use:   "chrnr-cli",
 	Short: "A brief description of your application",
-	Long: `A longer description that spans multiple lines and likely contains
-examples and usage of using your application. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Long: `About CHRNR-CLI is a CLI application that creates a specified number of files with random data, and then "churns" them. This is useful to test the efficiency of change block tracking and consistency in backup and recovery of an application which simulates a stateful workload in Kubernetes`
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	// Run: func(cmd *cobra.Command, args []string) { },
