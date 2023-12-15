@@ -1,3 +1,6 @@
+/*
+Copyright © 2023 NAME HERE <EMAIL ADDRESS>
+*/
 package main
 
 import (
@@ -14,8 +17,8 @@ import (
 )
 
 var rootCmd = &cobra.Command{
-	Use:   "chrnr-cli",
-	Short: "chrnr-cli",
+	Use:   "k8s-file-churner",
+	Short: "K8s File Churner",
 	Run:   runCommand,
 }
 
@@ -23,21 +26,14 @@ func runCommand(cmd *cobra.Command, args []string) {
 	// start the timer
 	start := time.Now()
 
-	// // Load the config
-	// cfg, err := config.LoadConfig()
-	// if err != nil {
-	// 	log.Fatal(err.Error())
-	// }
-	cfg := config.Config{
-		SizeOfFileMB:         1,
-		SizeOfPVCGB:          2,
-		ChurnPercentage:      0.1,
-		ChurnIntervalMinutes: time.Duration(1 * time.Minute),
-		ChurnDuration:        time.Duration(10 * time.Minute),
+	// Load the config
+	cfg, err := config.LoadConfig()
+	if err != nil {
+		log.Fatal(err.Error())
 	}
 
 	// Create the app/testfiles directory
-	err := os.MkdirAll("app/testfiles", 0755)
+	err = os.MkdirAll("app/testfiles", 0755)
 	if err != nil {
 		log.Fatal(err.Error())
 	}
@@ -54,7 +50,6 @@ func runCommand(cmd *cobra.Command, args []string) {
 	log.Printf("Size of PVC in Gb: %d\n", cfg.SizeOfPVCGB)
 	log.Printf("Churn percentage: %v\n", (cfg.ChurnPercentage * 100))
 	log.Printf("Churn interval in minutes: %v\n", printChurnInterval)
-	log.Printf("Churn duration in minutes: %v\n", time.Duration.Minutes(cfg.ChurnDuration))
 
 	// calculate number of files to create
 	sizeOfPVCMB := int(cfg.SizeOfPVCGB * 999)
@@ -89,10 +84,7 @@ func runCommand(cmd *cobra.Command, args []string) {
 	// start churning the files
 	churnTicker := time.NewTicker(cfg.ChurnIntervalMinutes)
 	go func() {
-		log.Printf("Churning %v percent of files every %v minutes", (cfg.ChurnPercentage * 100), printChurnInterval)
-
-		// Set the churn end time
-		churnEndTime := time.Now().Add(cfg.ChurnDuration)
+		log.Printf("Churning %v percent of files every %v", (cfg.ChurnPercentage * 100), printChurnInterval)
 
 		for {
 			select {
@@ -101,12 +93,10 @@ func runCommand(cmd *cobra.Command, args []string) {
 			case <-time.After(120 * time.Second):
 				log.Println("Waiting to churn files")
 			}
-			// Check if churn duration has elapsed
-			if time.Now().After(churnEndTime) {
-				break
-			}
 		}
 	}()
+
+	// this is a hack to keep the program running until interrupted
 	<-make(chan struct{})
 }
 
